@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import CountUp from './components/Count-Up';
 import Counter from './components/Counter';
@@ -10,8 +10,24 @@ function App(props) {
 
   const [state, setState] = useState(0)
   const [color, setColor] = useState('green')
-  const [names, setNames] = useState(["asi"])
+  const [names, setNames] = useState([""])
   const [input, setInput] = useState("")
+  const [jokes, setJokes] = useState('')
+  // const [counter, setCounter] = useState(0)
+
+  const url = 'http://api.icndb.com/jokes/random'
+  useEffect(() => {
+    jokesApi()
+
+
+  }, [])
+  // setInterval(() => { setCounter(counter + 1) }, 3000)
+  function jokesApi() {
+    fetch(url).then((response) => response.json()).then((data) => setJokes(data.value.joke));
+
+
+  }
+
 
   function pushInputToList() {
     setNames(oldArray => [...oldArray, input])
@@ -27,10 +43,12 @@ function App(props) {
   }
   return (
     <>
+      <h2>{jokes}</h2>
+
       <div>
         <ul>
           {
-            names.map((item) => {return <li>{item}</li> })
+            names.map((item) => { return <li>{item}</li> })
           }
         </ul>
         <input onChange={(e) => { setInput(e.target.value) }} placeholder='click yours name ' />
@@ -52,7 +70,7 @@ function App(props) {
     // <span>props number is :{props.number}</span>
     //     <Counter />
     //     <CountUp />
-    {/* //     <Kors/> */}
+        {/* //     <Kors/> */}
     //     <User name="natan" />
     //     <TagName name="belay" />
     //       </div>
